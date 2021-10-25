@@ -1,6 +1,5 @@
 'use strict';
 
-// 3rd Party Resources
 const express = require('express');
 const bcrypt = require('bcrypt');
 const base64 = require('base-64');
@@ -8,10 +7,8 @@ const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config();
 
 
-// Prepare the express app
 const app = express();
 
-// Process JSON input and put the data on req.body
 app.use(express.json());
 
 const sequelize = new Sequelize(process.env.DATABASE_URL);
@@ -19,7 +16,6 @@ const sequelize = new Sequelize(process.env.DATABASE_URL);
 // Process FORM intput and put the data on req.body
 app.use(express.urlencoded({ extended: true }));
 
-// Create a Sequelize model
 const Users = sequelize.define('User', {
   username: {
     type: DataTypes.STRING,
@@ -31,24 +27,45 @@ const Users = sequelize.define('User', {
   }
 });
 
-// Signup Route -- create a new user
-// Two ways to test this route with httpie
-// echo '{"username":"john","password":"foo"}' | http post :3000/signup
-// http post :3000/signup usernmae=john password=foo
-app.post('/signup', async (req, res) => {
+Users.beforeCreate( async (user) => {
 
-  try {
-    req.body.password = await bcrypt.hash(req.body.password, 10);
-    const record = await Users.create(req.body);
-    res.status(200).json(record);
-  } catch (e) { res.status(403).send("Error Creating User"); }
-});
+  let encryptedPassword = await bcrypt.hash(user.password, 10);
+  user.password = encryptedPassword;
+
+})
+
+// app.post('/signup', async (req, res) => {
+
+//   try {
+//     req.body.password = await bcrypt.hash(req.body.password, 10);
+//     const record = await Users.create(req.body);
+//     res.status(200).json(record);
+
+//   } catch (e) { 
+//     res.status(403).send("Error Creating User"); 
+//   }
+
+// });
+
+app.post('/signup', async (request, response) => {
+
+  let userData = request.body;
+
+  let newUser = await Users.create({ 
+    username: userData.username, 
+    password: userData.password
+  })
+
+  response.send(newUser);
+
+})
 
 
 // Signin Route -- login with username and password
 // test with httpie
 // http post :3000/signin -a john:foo
 app.post('/signin', async (req, res) => {
+  console.log(req.headers.authorization, '<-- REQ DOT HEADERS --<<')
 
   /*
     req.headers.authorization is : "Basic sdkjdsljd="
@@ -76,6 +93,7 @@ app.post('/signin', async (req, res) => {
     const user = await Users.findOne({ where: { username: username } });
     const valid = await bcrypt.compare(password, user.password);
     if (valid) {
+      console.log(valid, '<-- VALID --<<')
       res.status(200).json(user);
     }
     else {
