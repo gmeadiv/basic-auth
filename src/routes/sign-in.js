@@ -1,6 +1,8 @@
 'use strict';
 
-const { users } = require('../models/index.js')
+const { users } = require('../models/index.js');
+const base64 = require('base-64');
+const bcrypt = require('bcrypt');
 
 async function signIn(request, response) {
   try {
@@ -13,9 +15,11 @@ async function signIn(request, response) {
 
     let [ user, pass ] = decodedUserPass.split(':');
    
-    let userQuery = await user.findOne({where: { username: user}});
+    let userQuery = await users.findOne({where: { username: user}});
 
-    let isValidPassword = await bcrypt.compare(pass, userQuery.password);
+    let userQueryPWord = userQuery.password;
+
+    let isValidPassword = await bcrypt.compare(pass, userQueryPWord);
    
     if (isValidPassword) {
    
