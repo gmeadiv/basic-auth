@@ -5,6 +5,10 @@ const base64 = require('base-64');
 const bcrypt = require('bcrypt');
 
 async function signIn(request, response) {
+
+  // let encryptedPassword = await bcrypt.hash(users.password, 10);
+  // users.password = encryptedPassword;
+
   try {
 
     let authString = request.headers.authorization;
