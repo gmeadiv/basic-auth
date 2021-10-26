@@ -19,7 +19,9 @@ async function signIn(request, response) {
 
     let userQueryPWord = userQuery.password;
 
-    let isValidPassword = await bcrypt.compare(userQueryPWord, pass);
+    console.log(pass, '<-- PASS || USER QUERY -->', userQueryPWord);
+
+    let isValidPassword = await bcrypt.compare(pass, userQueryPWord);
    
     if (isValidPassword) {
    
