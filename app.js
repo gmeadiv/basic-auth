@@ -130,9 +130,9 @@ app.post('/signin', async (request, response) => {
 
 // make sure our tables are created, start up the HTTP server.
 // module.exports = app;
-sequelize.sync()
-  .then(() => {
-    app.listen(3005, () => console.log('server is running on', 3005));
-  }).catch(e => {
-    console.error('Could not start server', e.message);
-  });
+// sequelize.sync()
+//   .then(() => {
+//     app.listen(3005, () => console.log('server is running on', 3005));
+//   }).catch(e => {
+//     console.error('Could not start server', e.message);
+//   });

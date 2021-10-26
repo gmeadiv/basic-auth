@@ -1,11 +1,13 @@
 'use strict';
 
-const { user } = require('../models/User.js');
+const { users } = require('../models/index.js');
 
 async function signUp(request, response) {
   let userData = request.body;
 
-  let newUser = await user.create({
+  console.log(userData, '<-- USER DATA --<<')
+
+  let newUser = await users.create({
     username: userData.username,
     password: userData.password,
   })
