@@ -12,7 +12,7 @@ async function signUp(request, response) {
     password: userData.password,
   })
 
-  response.send(newUser);
+  response.status(201).send(newUser);
   console.log('CREATED NEW USER!')
 }
 

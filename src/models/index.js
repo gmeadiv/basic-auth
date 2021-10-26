@@ -2,8 +2,6 @@
 'use strict';
 
 const express = require('express');
-const bcrypt = require('bcrypt');
-const base64 = require('base-64');
 require('dotenv').config();
 
 const { Sequelize, DataTypes } = require('sequelize');
