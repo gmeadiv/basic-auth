@@ -9,11 +9,11 @@ beforeAll(async () => {
   await db.sync();
 });
 
-// afterAll(async () => {
-//   await db.drop();
-// });
+afterAll(async () => {
+  await db.drop();
+});
 
-xdescribe('Testing Sign Up', () => {
+describe('Testing Sign Up', () => {
   it('should create a username and password on POST /signup', async () => {
 
     const response = await request.post('/signup');
@@ -22,7 +22,7 @@ xdescribe('Testing Sign Up', () => {
   });
 });
 
-xdescribe('Testing Sign In', () => {
+describe('Testing Sign In', () => {
   it('should create a username and password on POST /signin', async () => {
 
     const response = await request.post('/signin');

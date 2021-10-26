@@ -19,7 +19,7 @@ async function signIn(request, response) {
 
     let userQueryPWord = userQuery.password;
 
-    let isValidPassword = await bcrypt.compare(pass, userQueryPWord);
+    let isValidPassword = await bcrypt.compare(userQueryPWord, pass);
    
     if (isValidPassword) {
    
@@ -27,11 +27,9 @@ async function signIn(request, response) {
    
     } else {
 
-      response.status(401).send('unauthenticated');
+      response.status(401).send('password doesn\'t match');
 
     }
-   
-    
    
      } catch (error) {
        response.status(401).send('unauthenticated request');
